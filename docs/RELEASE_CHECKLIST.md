@@ -43,7 +43,7 @@ that differs from the reviewed commit.
 ## Package publication
 
 - [x] Replace provisional metadata with final repository/homepage/bugs URLs.
-- [ ] Seal and hash one exact set of tarballs from the reviewed commit.
+- [x] Seal and hash one exact set of tarballs from the reviewed commit.
 - [x] Confirm npm namespace ownership and unpublished versions.
-- [ ] Publish the exact tarballs, then verify registry integrity and clean consumer installs.
-- [ ] Tag and create the GitHub release only after registry verification succeeds.
+- [x] Publish the exact tarballs, then verify registry integrity and clean consumer installs.
+- [x] Tag and create the GitHub release only after registry verification succeeds.
