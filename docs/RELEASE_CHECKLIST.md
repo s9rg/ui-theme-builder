@@ -5,7 +5,7 @@ that differs from the reviewed commit.
 
 ## Product decisions
 
-- [ ] Reserve the repository name and final npm package namespace.
+- [x] Reserve the repository name and final npm package namespace.
 - [x] Keep a transparent starter mapping in the workbench and defer a general automatic
       ramp/semantic suggestion engine to a later recipe package.
 - [x] Keep array order semantically neutral; explicit mappings are required.
@@ -33,16 +33,17 @@ that differs from the reviewed commit.
 
 ## Repository and Pages
 
-- [ ] Create a clean-root public GitHub repository; do not import unrelated history.
-- [ ] Enable GitHub Pages with GitHub Actions.
-- [ ] Protect `main` with the stable `CI required` check.
-- [ ] Push the reviewed commit and wait for CI and Pages on that exact SHA.
-- [ ] Smoke the public page, hashed JS/CSS assets, generated downloads, and repository links.
+- [x] Create a clean-root public GitHub repository; do not import unrelated history.
+- [x] Enable GitHub Pages with GitHub Actions.
+- [x] Protect `main` with the stable `CI required` check.
+- [x] Push the reviewed commit and wait for CI and Pages on that exact SHA.
+- [x] Smoke the public page, hashed JS/CSS assets, third-party notices, generated downloads, and
+      repository links.
 
 ## Package publication
 
 - [x] Replace provisional metadata with final repository/homepage/bugs URLs.
 - [ ] Seal and hash one exact set of tarballs from the reviewed commit.
-- [ ] Confirm npm namespace ownership and unpublished versions.
+- [x] Confirm npm namespace ownership and unpublished versions.
 - [ ] Publish the exact tarballs, then verify registry integrity and clean consumer installs.
 - [ ] Tag and create the GitHub release only after registry verification succeeds.
