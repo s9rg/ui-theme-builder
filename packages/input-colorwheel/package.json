@@ -1,0 +1,58 @@
+{
+  "name": "@s9rg/theme-input-colorwheel",
+  "version": "0.5.0",
+  "description": "Colorwheel Palette input adapter for Theme Compiler",
+  "keywords": [
+    "colorwheel",
+    "design-tokens",
+    "palette",
+    "theme"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s9rg/ui-theme-builder.git",
+    "directory": "packages/input-colorwheel"
+  },
+  "homepage": "https://s9rg.github.io/ui-theme-builder/",
+  "bugs": {
+    "url": "https://github.com/s9rg/ui-theme-builder/issues"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external @s9rg/theme-compiler --external @s9rg/colorwheel/core"
+  },
+  "dependencies": {
+    "@s9rg/theme-compiler": "0.5.0"
+  },
+  "peerDependencies": {
+    "@s9rg/colorwheel": ">=1.0.1 <2"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": false,
+    "baseUrl": ".",
+    "paths": {
+      "@s9rg/theme-compiler": ["packages/compiler/src/index.ts"],
+      "@s9rg/theme-adapter-dtcg": ["packages/adapter-dtcg/src/index.ts"],
+      "@s9rg/theme-adapter-css": ["packages/adapter-css/src/index.ts"],
+      "@s9rg/theme-adapter-tailwind": [
+        "packages/adapter-tailwind/src/index.ts"
+      ],
+      "@s9rg/theme-adapter-mui": ["packages/adapter-mui/src/index.ts"],
+      "@s9rg/theme-input-colorwheel": [
+        "packages/input-colorwheel/src/index.ts"
+      ],
+      "@s9rg/theme-demo-protocol": ["packages/demo-protocol/src/index.ts"]
+    }
+  },
+  "include": [
+    "packages/**/*.ts",
+    "test/**/*.ts",
+    "playwright.config.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": ["**/dist/**", "**/node_modules/**"]
+}

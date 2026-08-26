@@ -1,0 +1,58 @@
+{
+  "name": "@s9rg/theme-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Palette-to-theme compiler workspace",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "npm@10.9.2",
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build:packages && npm run build:demo",
+    "build:packages": "npm run build -w @s9rg/theme-compiler && npm run build -w @s9rg/theme-adapter-dtcg && npm run build -w @s9rg/theme-adapter-css && npm run build -w @s9rg/theme-adapter-tailwind && npm run build -w @s9rg/theme-adapter-mui && npm run build -w @s9rg/theme-input-colorwheel && npm run build -w @s9rg/theme-demo-protocol",
+    "build:demo": "npm run build -w @s9rg/theme-playground",
+    "dev": "npm run dev -w @s9rg/theme-playground",
+    "test": "vitest run",
+    "test:browser": "playwright test",
+    "test:targets": "node scripts/verify-targets.mjs",
+    "test:packages": "node scripts/verify-packages.mjs",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p apps/playground/tsconfig.json",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "verify": "node scripts/verify-workspace.mjs",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run test:targets && npm run test:packages && npm run test:browser && npm run verify"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.62.1",
+    "@tailwindcss/cli": "^4.3.3",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "eslint": "^10.9.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.4",
+    "prettier": "^3.6.2",
+    "publint": "^0.3.24",
+    "tailwindcss": "^4.3.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.68.0",
+    "vite": "^7.1.3",
+    "vitest": "^3.2.4"
+  },
+  "overrides": {
+    "esbuild": "^0.28.2"
+  }
+}
