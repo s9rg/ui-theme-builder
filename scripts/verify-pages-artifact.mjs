@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import { URL } from "node:url";
 
 const root = path.resolve(import.meta.dirname, "..");
 const distRoot = path.join(root, "apps", "playground", "dist");
@@ -12,6 +13,34 @@ const index = await readFile(path.join(distRoot, "index.html"), "utf8");
 const notice = await readFile(noticePath, "utf8");
 
 assert.match(index, /(?:src|href)="\/ui-theme-builder\//);
+const runtimeAssetReferences = [
+  ...index.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="([^"]+)"[^>]*>/gi),
+].map((match) => match[1]);
+assert.ok(
+  runtimeAssetReferences.length > 0,
+  "Pages index has no runtime assets",
+);
+for (const reference of runtimeAssetReferences) {
+  const url = new URL(reference, "https://pages.invalid");
+  assert.equal(
+    url.origin,
+    "https://pages.invalid",
+    `Pages runtime asset must be local: ${reference}`,
+  );
+  assert.ok(
+    url.pathname.startsWith("/ui-theme-builder/"),
+    `Pages runtime asset is outside the configured base: ${reference}`,
+  );
+  const relativePath = decodeURIComponent(
+    url.pathname.slice("/ui-theme-builder/".length),
+  );
+  const assetPath = path.resolve(distRoot, relativePath);
+  assert.ok(
+    assetPath.startsWith(`${distRoot}${path.sep}`),
+    `Pages runtime asset escaped the artifact root: ${reference}`,
+  );
+  await readFile(assetPath);
+}
 assert.ok(
   notice.startsWith("UI Theme Builder — Third-Party Notices\n\n"),
   "Pages legal notice has an invalid header",
@@ -64,15 +93,27 @@ assert.doesNotMatch(
   "Every bundled package must declare its license",
 );
 
-const workspacePackages = new Set([
-  "@s9rg/theme-compiler",
-  "@s9rg/theme-adapter-dtcg",
-  "@s9rg/theme-adapter-css",
-  "@s9rg/theme-adapter-tailwind",
-  "@s9rg/theme-adapter-mui",
-  "@s9rg/theme-input-colorwheel",
-  "@s9rg/theme-demo-protocol",
-]);
+const packageRoot = path.join(root, "packages");
+const workspacePackages = new Set(
+  await Promise.all(
+    (await readdir(packageRoot, { withFileTypes: true }))
+      .filter((entry) => entry.isDirectory())
+      .map(async (entry) => {
+        const manifest = JSON.parse(
+          await readFile(
+            path.join(packageRoot, entry.name, "package.json"),
+            "utf8",
+          ),
+        );
+        assert.equal(
+          typeof manifest.name,
+          "string",
+          `${entry.name} has no package name`,
+        );
+        return manifest.name;
+      }),
+  ),
+);
 const requiredPackages = Object.keys(appManifest.dependencies ?? {}).filter(
   (name) => !workspacePackages.has(name),
 );
@@ -96,5 +137,5 @@ for (const section of packageSections) {
 }
 
 console.log(
-  `Verified Pages base and ${packages.length} bundled package notices.`,
+  `Verified ${runtimeAssetReferences.length} local Pages assets and ${packages.length} bundled package notices.`,
 );

@@ -1,7 +1,3 @@
-import { createCssAdapter } from "@s9rg/theme-adapter-css";
-import { createDtcgAdapter } from "@s9rg/theme-adapter-dtcg";
-import { createMuiAdapter } from "@s9rg/theme-adapter-mui";
-import { createTailwindAdapter } from "@s9rg/theme-adapter-tailwind";
 import { compileTheme } from "@s9rg/theme-compiler";
 import type { JsonValue, ThemeAdapter } from "@s9rg/theme-compiler";
 import { colorwheelPaletteToThemeProject } from "@s9rg/theme-input-colorwheel";
@@ -30,11 +26,33 @@ export interface WorkbenchCompilation {
   readonly previews: Readonly<Record<string, JsonValue>>;
 }
 
-const adapterFactories: Readonly<Record<TargetKey, () => ThemeAdapter>> = {
-  dtcg: () => createDtcgAdapter(),
-  css: () => createCssAdapter(),
-  tailwind: () => createTailwindAdapter(),
-  mui: () => createMuiAdapter(),
+const adapterFactories: Readonly<
+  Record<TargetKey, () => Promise<ThemeAdapter>>
+> = {
+  dtcg: async () =>
+    (await import("@s9rg/theme-adapter-dtcg")).createDtcgAdapter(),
+  css: async () => (await import("@s9rg/theme-adapter-css")).createCssAdapter(),
+  tailwind: async () =>
+    (await import("@s9rg/theme-adapter-tailwind")).createTailwindAdapter(),
+  mui: async () => (await import("@s9rg/theme-adapter-mui")).createMuiAdapter(),
+  antd: async () =>
+    (await import("@s9rg/theme-adapter-antd")).createAntdAdapter(),
+  shadcn: async () =>
+    (await import("@s9rg/theme-adapter-shadcn")).createShadcnAdapter(),
+  daisyui: async () =>
+    (await import("@s9rg/theme-adapter-daisyui")).createDaisyUiAdapter(),
+  vuetify: async () =>
+    (await import("@s9rg/theme-adapter-vuetify")).createVuetifyAdapter(),
+  "angular-material": async () =>
+    (
+      await import("@s9rg/theme-adapter-angular-material")
+    ).createAngularMaterialAdapter(),
+  ionic: async () =>
+    (await import("@s9rg/theme-adapter-ionic")).createIonicAdapter(),
+  "react-native-paper": async () =>
+    (
+      await import("@s9rg/theme-adapter-react-native-paper")
+    ).createReactNativePaperAdapter(),
 };
 
 function toText(content: string | Uint8Array): string {
@@ -74,7 +92,8 @@ export async function compileWorkbenchTheme(
         { id: "dark", label: "Dark", roles: compilerRoles(mappings.dark) },
       ],
     });
-    const result = await compileTheme(project, [adapterFactories[target]()], {
+    const adapter = await adapterFactories[target]();
+    const result = await compileTheme(project, [adapter], {
       ...(signal === undefined ? {} : { signal }),
     });
     const diagnostics = result.diagnostics.map((diagnostic) => ({

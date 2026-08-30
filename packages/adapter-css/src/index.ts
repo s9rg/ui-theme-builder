@@ -44,7 +44,7 @@ export const cssAdapterManifest = {
   id: "css@1",
   name: "CSS custom properties",
   engineApiVersion: "1",
-  adapterVersion: "0.5.0",
+  adapterVersion: "0.6.0",
   maturity: "beta",
   target: {
     name: "CSS Custom Properties",

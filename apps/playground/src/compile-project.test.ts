@@ -129,6 +129,13 @@ describe("playground compilation", () => {
         "tailwind",
         "mui",
         "dtcg",
+        "antd",
+        "shadcn",
+        "daisyui",
+        "vuetify",
+        "angular-material",
+        "ionic",
+        "react-native-paper",
       ] as const satisfies readonly TargetKey[]) {
         const result = await compileWorkbenchTheme(palette, mappings, target);
         expect(result.ok, `${harmony.type} -> ${target}`).toBe(true);

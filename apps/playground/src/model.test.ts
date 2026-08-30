@@ -80,12 +80,20 @@ describe("workbench model", () => {
   });
 
   it("labels MUI exact-runtime and keeps weaker previews explicit", () => {
-    expect(TARGETS.find((target) => target.key === "mui")?.fidelity).toBe(
-      "exact-runtime",
-    );
-    expect(TARGETS.find((target) => target.key === "tailwind")?.fidelity).toBe(
-      "mapped-preview",
-    );
+    expect(TARGETS.map(({ key, fidelity }) => [key, fidelity])).toEqual([
+      ["css", "exact-css-variables"],
+      ["tailwind", "mapped-preview"],
+      ["mui", "exact-runtime"],
+      ["dtcg", "mapped-preview"],
+      ["antd", "mapped-preview"],
+      ["shadcn", "mapped-preview"],
+      ["daisyui", "mapped-preview"],
+      ["vuetify", "mapped-preview"],
+      ["angular-material", "compile-verified"],
+      ["ionic", "mapped-preview"],
+      ["react-native-paper", "native-web-approximation"],
+    ]);
+    expect(new Set(TARGETS.map((target) => target.adapterId)).size).toBe(11);
   });
 
   it("reports every declared contrast pair", () => {

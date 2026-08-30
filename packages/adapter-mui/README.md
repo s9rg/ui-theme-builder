@@ -2,7 +2,7 @@
 
 Beta Theme Compiler adapter for Material UI v9 color-scheme options.
 
-> 0.5.0 is an early 0.x release. APIs may change before 1.0.0.
+> 0.6.0 is an early 0.x release. APIs may change before 1.0.0.
 
 ## Install
 

@@ -1,0 +1,55 @@
+{
+  "name": "@s9rg/theme-adapter-daisyui",
+  "version": "0.6.0",
+  "description": "daisyUI theme adapter for Theme Compiler",
+  "keywords": [
+    "color",
+    "daisyui",
+    "tailwindcss",
+    "theme"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s9rg/ui-theme-builder.git",
+    "directory": "packages/adapter-daisyui"
+  },
+  "homepage": "https://s9rg.github.io/ui-theme-builder/",
+  "bugs": {
+    "url": "https://github.com/s9rg/ui-theme-builder/issues"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external @s9rg/theme-compiler"
+  },
+  "dependencies": {
+    "@s9rg/theme-compiler": "0.6.0"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

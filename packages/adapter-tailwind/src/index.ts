@@ -18,7 +18,7 @@ export const tailwindAdapterManifest = {
   id: "tailwind@4",
   name: "Tailwind CSS v4",
   engineApiVersion: "1",
-  adapterVersion: "0.5.0",
+  adapterVersion: "0.6.0",
   maturity: "beta",
   target: {
     name: "tailwindcss",
