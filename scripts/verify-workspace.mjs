@@ -9,13 +9,18 @@ const lockfile = await readJson(path.join(root, "package-lock.json"));
 const forbiddenRuntimePackages = new Set([
   "@angular/material",
   "@chakra-ui/react",
+  "@ionic/core",
+  "@material/material-color-utilities",
   "@mui/material",
   "@vitejs/plugin-react",
   "antd",
+  "daisyui",
   "mantine",
   "primevue",
   "react",
   "react-dom",
+  "react-native-paper",
+  "shadcn",
   "tailwindcss",
   "vuetify",
 ]);
@@ -79,8 +84,8 @@ for (const entry of entries.sort()) {
   ) {
     errors.push(`${entry}: public package name must start with @s9rg/theme-`);
   }
-  if (manifest.version !== "0.5.0") {
-    errors.push(`${entry}: expected synchronized version 0.5.0`);
+  if (manifest.version !== "0.6.0") {
+    errors.push(`${entry}: expected synchronized version 0.6.0`);
   }
   if (manifest.license !== "MIT") errors.push(`${entry}: license must be MIT`);
   if (manifest.private === true)

@@ -1,6 +1,6 @@
 {
   "name": "@s9rg/theme-input-colorwheel",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Colorwheel Palette input adapter for Theme Compiler",
   "keywords": [
     "colorwheel",
@@ -44,7 +44,7 @@
     "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external @s9rg/theme-compiler --external @s9rg/colorwheel/core"
   },
   "dependencies": {
-    "@s9rg/theme-compiler": "0.5.0"
+    "@s9rg/theme-compiler": "0.6.0"
   },
   "peerDependencies": {
     "@s9rg/colorwheel": ">=1.0.1 <2"

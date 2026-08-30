@@ -18,7 +18,7 @@ export const dtcgAdapterManifest = {
   id: "dtcg@2025.10",
   name: "DTCG 2025.10",
   engineApiVersion: "1",
-  adapterVersion: "0.5.0",
+  adapterVersion: "0.6.0",
   maturity: "beta",
   target: {
     name: "Design Tokens Community Group",

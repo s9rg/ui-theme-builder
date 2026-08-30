@@ -80,10 +80,44 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
 
+  angular_material:
+    name: Angular Material v22 · AOT and Sass
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            test/targets/angular-material/package-lock.json
+      - run: npm ci
+      - run: npm ci --prefix test/targets/angular-material
+      - run: npm run build -w @s9rg/theme-compiler
+      - run: npm run build -w @s9rg/theme-adapter-angular-material
+      - run: npm run test:target:angular-material
+
+  react_native_paper:
+    name: React Native Paper v5 · Metro iOS and Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build -w @s9rg/theme-compiler
+      - run: npm run build -w @s9rg/theme-adapter-react-native-paper
+      - run: npm run test:target:react-native-paper
+
   required:
     name: CI required
     if: always()
-    needs: [static, unit, build, browser]
+    needs: [static, unit, build, browser, angular_material, react_native_paper]
     runs-on: ubuntu-latest
     steps:
       - name: Require every gate

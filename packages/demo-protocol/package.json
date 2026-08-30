@@ -1,6 +1,6 @@
 {
   "name": "@s9rg/theme-demo-protocol",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Versioned preview protocol for the Theme Compiler workbench",
   "keywords": [
     "design-tokens",

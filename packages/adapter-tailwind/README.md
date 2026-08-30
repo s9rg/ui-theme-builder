@@ -2,7 +2,7 @@
 
 Beta Theme Compiler adapter for Tailwind CSS v4's CSS-first theme variables.
 
-> 0.5.0 is an early 0.x release. APIs may change before 1.0.0.
+> 0.6.0 is an early 0.x release. APIs may change before 1.0.0.
 
 ## Install
 

@@ -12,6 +12,25 @@ const workspacePackages: readonly (readonly [string, string])[] = [
     "../../packages/adapter-tailwind/src/index.ts",
   ],
   ["@s9rg/theme-adapter-mui", "../../packages/adapter-mui/src/index.ts"],
+  ["@s9rg/theme-adapter-antd", "../../packages/adapter-antd/src/index.ts"],
+  ["@s9rg/theme-adapter-shadcn", "../../packages/adapter-shadcn/src/index.ts"],
+  [
+    "@s9rg/theme-adapter-daisyui",
+    "../../packages/adapter-daisyui/src/index.ts",
+  ],
+  [
+    "@s9rg/theme-adapter-vuetify",
+    "../../packages/adapter-vuetify/src/index.ts",
+  ],
+  [
+    "@s9rg/theme-adapter-angular-material",
+    "../../packages/adapter-angular-material/src/index.ts",
+  ],
+  ["@s9rg/theme-adapter-ionic", "../../packages/adapter-ionic/src/index.ts"],
+  [
+    "@s9rg/theme-adapter-react-native-paper",
+    "../../packages/adapter-react-native-paper/src/index.ts",
+  ],
   [
     "@s9rg/theme-input-colorwheel",
     "../../packages/input-colorwheel/src/index.ts",

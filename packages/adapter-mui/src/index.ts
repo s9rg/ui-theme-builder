@@ -72,7 +72,7 @@ export const muiAdapterManifest = {
   id: "mui@9",
   name: "Material UI v9",
   engineApiVersion: "1",
-  adapterVersion: "0.5.0",
+  adapterVersion: "0.6.0",
   maturity: "beta",
   target: {
     name: "@mui/material",

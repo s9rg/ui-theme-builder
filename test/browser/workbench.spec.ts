@@ -8,6 +8,108 @@ interface OpenWorkbenchResult {
   readonly runtimeErrors: string[];
 }
 
+const TARGET_CASES = [
+  {
+    key: "css",
+    name: "CSS variables",
+    accessibleName: /^CSS variables/,
+    adapterId: "css@1",
+    fidelity: "exact css variables",
+    artifactPath: "theme.css",
+    artifactCount: 2,
+  },
+  {
+    key: "tailwind",
+    name: "Tailwind",
+    accessibleName: /^Tailwind/,
+    adapterId: "tailwind@4",
+    fidelity: "mapped preview",
+    artifactPath: "theme.tailwind.css",
+    artifactCount: 2,
+  },
+  {
+    key: "mui",
+    name: "Material UI",
+    accessibleName: /^Material UI/,
+    adapterId: "mui@9",
+    fidelity: "exact runtime",
+    artifactPath: "theme.ts",
+    artifactCount: 2,
+  },
+  {
+    key: "dtcg",
+    name: "Design Tokens",
+    accessibleName: /^Design Tokens/,
+    adapterId: "dtcg@2025.10",
+    fidelity: "mapped preview",
+    artifactPath: "theme.primitives.tokens.json",
+    artifactCount: 5,
+  },
+  {
+    key: "antd",
+    name: "Ant Design",
+    accessibleName: /^Ant Design/,
+    adapterId: "antd@6",
+    fidelity: "mapped preview",
+    artifactPath: "antd/theme.ts",
+    artifactCount: 2,
+  },
+  {
+    key: "shadcn",
+    name: "shadcn/ui",
+    accessibleName: /^shadcn\/ui/,
+    adapterId: "shadcn@4",
+    fidelity: "mapped preview",
+    artifactPath: "shadcn/theme.json",
+    artifactCount: 2,
+  },
+  {
+    key: "daisyui",
+    name: "daisyUI",
+    accessibleName: /^daisyUI/,
+    adapterId: "daisyui@5",
+    fidelity: "mapped preview",
+    artifactPath: "daisyui/theme.css",
+    artifactCount: 2,
+  },
+  {
+    key: "vuetify",
+    name: "Vuetify",
+    accessibleName: /^Vuetify/,
+    adapterId: "vuetify@4",
+    fidelity: "mapped preview",
+    artifactPath: "vuetify.theme.ts",
+    artifactCount: 2,
+  },
+  {
+    key: "angular-material",
+    name: "Angular Material",
+    accessibleName: /^Angular Material/,
+    adapterId: "angular-material@22",
+    fidelity: "compile verified",
+    artifactPath: "angular-material.theme.scss",
+    artifactCount: 2,
+  },
+  {
+    key: "ionic",
+    name: "Ionic",
+    accessibleName: /^Ionic/,
+    adapterId: "ionic@9",
+    fidelity: "mapped preview",
+    artifactPath: "ionic.theme.css",
+    artifactCount: 2,
+  },
+  {
+    key: "react-native-paper",
+    name: "React Native Paper",
+    accessibleName: /^React Native Paper/,
+    adapterId: "react-native-paper@5",
+    fidelity: "native web approximation",
+    artifactPath: "react-native-paper/theme.ts",
+    artifactCount: 2,
+  },
+] as const;
+
 async function openWorkbench(page: Page): Promise<OpenWorkbenchResult> {
   const runtimeErrors: string[] = [];
   page.on("pageerror", (error) => runtimeErrors.push(error.message));
@@ -257,6 +359,16 @@ test("presents the builder in color, target, then preview order", async ({
   ];
 
   for (const heading of headings) await expect(heading).toBeVisible();
+  const targetCards = page.locator(".target-card");
+  await expect(targetCards).toHaveCount(TARGET_CASES.length);
+  expect(await targetCards.locator(".target-name").allTextContents()).toEqual(
+    TARGET_CASES.map((target) => target.name),
+  );
+  for (const target of TARGET_CASES) {
+    await expect(
+      page.getByRole("radio", { name: target.accessibleName }),
+    ).toBeVisible();
+  }
   const ordered = await page.evaluate(() => {
     const elements = ["palette-title", "library-title", "results-title"].map(
       (id) => document.getElementById(id),
@@ -284,6 +396,89 @@ test("presents the builder in color, target, then preview order", async ({
     await expect(downloadTheme).toBeEnabled();
   }
   expect(runtimeErrors).toEqual([]);
+});
+
+test.describe("target generator matrix", () => {
+  for (const target of TARGET_CASES) {
+    test(`${target.name} compiles, previews, shows code, and downloads`, async ({
+      page,
+    }) => {
+      const { runtimeErrors } = await openWorkbench(page);
+      const targetRadio = page.getByRole("radio", {
+        name: target.accessibleName,
+      });
+
+      if (target.key === "css") {
+        await expect(targetRadio).toBeChecked();
+      } else {
+        await observeDownloadAvailability(page);
+        await targetRadio.check();
+        await waitForCompilation(page, target.name);
+        expect(await downloadWasDisabled(page)).toBe(true);
+      }
+
+      await expect(targetRadio).toBeChecked();
+      await expect(
+        page.getByRole("button", { name: "Download theme" }),
+      ).toBeEnabled();
+
+      const previewStatus = page.getByLabel("Preview status");
+      await expect(previewStatus).toContainText(target.adapterId);
+      await expect(previewStatus).toContainText(target.fidelity);
+      if (target.key === "mui") {
+        await expect(
+          page.getByRole("heading", { name: "Material UI runtime" }),
+        ).toBeVisible();
+      } else {
+        await expect(
+          page.getByRole("heading", {
+            name: "A realistic analytics workspace",
+          }),
+        ).toBeVisible();
+        await expect(page.locator(".preview-disclaimer")).toContainText(
+          "not the provider runtime",
+        );
+      }
+
+      const codePanel = await openGeneratedCode(page, target.name);
+      const artifactTab = codePanel.getByRole("tab", {
+        name: target.artifactPath,
+        exact: true,
+      });
+      await expect(artifactTab).toBeVisible();
+      await artifactTab.click();
+      await expect(
+        codePanel.getByLabel(`Generated ${target.artifactPath}`, {
+          exact: true,
+        }),
+      ).toContainText(/\S/);
+      await expect(
+        codePanel.getByRole("tab", { name: "theme.lock.json", exact: true }),
+      ).toBeVisible();
+      if (target.key !== "css") {
+        await expect(
+          codePanel.getByRole("tab", { name: "theme.css", exact: true }),
+        ).toHaveCount(0);
+      }
+
+      const bundleDownloadPromise = page.waitForEvent("download");
+      await page
+        .getByRole("button", { name: "Download theme", exact: true })
+        .click();
+      const bundleDownload = await bundleDownloadPromise;
+      expect(bundleDownload.suggestedFilename()).toBe(
+        `ui-theme-${target.key}.zip`,
+      );
+      const bundlePath = await bundleDownload.path();
+      expect(bundlePath).not.toBeNull();
+      const bundle = unzipSync(new Uint8Array(await readFile(bundlePath)));
+      expect(Object.keys(bundle)).toHaveLength(target.artifactCount);
+      expect(Object.keys(bundle)).toEqual(
+        expect.arrayContaining([target.artifactPath, "theme.lock.json"]),
+      );
+      expect(runtimeErrors).toEqual([]);
+    });
+  }
 });
 
 test("renders full-width realistic CSS and MUI stories without focusable demo controls", async ({

@@ -1,6 +1,6 @@
 {
   "name": "@s9rg/theme-compiler",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Portable palette-to-theme compiler and adapter contract",
   "keywords": [
     "color",

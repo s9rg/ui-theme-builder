@@ -48,7 +48,18 @@ export const ROLE_LABELS: Readonly<Record<SemanticRole, string>> = {
   border: "Border",
 };
 
-export type TargetKey = "dtcg" | "css" | "tailwind" | "mui";
+export type TargetKey =
+  | "dtcg"
+  | "css"
+  | "tailwind"
+  | "mui"
+  | "antd"
+  | "shadcn"
+  | "daisyui"
+  | "vuetify"
+  | "angular-material"
+  | "ionic"
+  | "react-native-paper";
 
 export interface TargetDefinition {
   readonly key: TargetKey;
@@ -98,6 +109,76 @@ export const TARGETS: readonly TargetDefinition[] = [
     description:
       "Portable structured tokens and aliases for downstream tooling.",
     artifactHint: "JSON",
+  },
+  {
+    key: "antd",
+    adapterId: "antd@6",
+    name: "Ant Design",
+    profile: "Ant Design v6",
+    fidelity: "mapped-preview",
+    description:
+      "Typed light and dark ThemeConfig objects using Ant's token algorithms.",
+    artifactHint: "TypeScript",
+  },
+  {
+    key: "shadcn",
+    adapterId: "shadcn@4",
+    name: "shadcn/ui",
+    profile: "Registry theme v4",
+    fidelity: "mapped-preview",
+    description:
+      "A registry:theme item with explicit light and dark semantic variables.",
+    artifactHint: "JSON",
+  },
+  {
+    key: "daisyui",
+    adapterId: "daisyui@5",
+    name: "daisyUI",
+    profile: "daisyUI v5",
+    fidelity: "mapped-preview",
+    description:
+      "Tailwind plugin theme blocks that extend the built-in light and dark themes.",
+    artifactHint: "CSS",
+  },
+  {
+    key: "vuetify",
+    adapterId: "vuetify@4",
+    name: "Vuetify",
+    profile: "Vuetify v4",
+    fidelity: "mapped-preview",
+    description:
+      "Typed ThemeDefinition objects for Vue light and dark provider themes.",
+    artifactHint: "TypeScript",
+  },
+  {
+    key: "angular-material",
+    adapterId: "angular-material@22",
+    name: "Angular Material",
+    profile: "Material 3 · v22",
+    fidelity: "compile-verified",
+    description:
+      "Material 3 tonal palettes, system overrides, and Sass theme mixins.",
+    artifactHint: "SCSS",
+  },
+  {
+    key: "ionic",
+    adapterId: "ionic@9",
+    name: "Ionic",
+    profile: "Ionic v9",
+    fidelity: "mapped-preview",
+    description:
+      "Cross-framework Ionic variables for React, Angular, Vue, and Core.",
+    artifactHint: "CSS",
+  },
+  {
+    key: "react-native-paper",
+    adapterId: "react-native-paper@5",
+    name: "React Native Paper",
+    profile: "Paper MD3 · v5",
+    fidelity: "native-web-approximation",
+    description:
+      "Typed MD3 light and dark themes that preserve unauthored Paper defaults.",
+    artifactHint: "TypeScript",
   },
 ] as const;
 
